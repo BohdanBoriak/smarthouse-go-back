@@ -37,5 +37,33 @@ func NewHouseRepository(dbSession db.Session) houseRepository {
 }
 
 func (r houseRepository) Save(h domain.House) (domain.House, error) {
+	return domain.House{}, nil
+}
 
+func (r houseRepository) mapDomainToModel(h domain.House) house {
+	return house{
+		Id:          h.Id,
+		UserId:      h.UserId,
+		Name:        h.Name,
+		Address:     h.Address,
+		Lat:         h.Lat,
+		Lon:         h.Lon,
+		CreatedDate: h.CreatedDate,
+		UpdatedDate: h.UpdatedDate,
+		DeletedDate: h.DeletedDate,
+	}
+}
+
+func (r houseRepository) mapModelToDomain(h house) domain.House {
+	return domain.House{
+		Id:          h.Id,
+		UserId:      h.UserId,
+		Name:        h.Name,
+		Address:     h.Address,
+		Lat:         h.Lat,
+		Lon:         h.Lon,
+		CreatedDate: h.CreatedDate,
+		UpdatedDate: h.UpdatedDate,
+		DeletedDate: h.DeletedDate,
+	}
 }
