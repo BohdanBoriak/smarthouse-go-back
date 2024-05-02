@@ -22,6 +22,7 @@ type house struct {
 }
 
 type HouseRepository interface {
+	Save(h domain.House) (domain.House, error)
 }
 
 type houseRepository struct {
@@ -37,7 +38,13 @@ func NewHouseRepository(dbSession db.Session) houseRepository {
 }
 
 func (r houseRepository) Save(h domain.House) (domain.House, error) {
-	return domain.House{}, nil
+	hs := r.mapDomainToModel(h)
+	err := r.coll.InsertReturning(&hs)
+	if err != nil {
+		return domain.House{}, err
+	}
+	dh := r.mapModelToDomain(hs)
+	return dh, nil
 }
 
 func (r houseRepository) mapDomainToModel(h domain.House) house {
