@@ -8,10 +8,17 @@ import (
 )
 
 type HouseService interface {
+	Save(h domain.House) (domain.House, error)
 }
 
 type houseService struct {
 	houseRepository database.HouseRepository
+}
+
+func NewHouseService(hr database.HouseRepository) HouseService {
+	return houseService{
+		houseRepository: hr,
+	}
 }
 
 func (s houseService) Save(h domain.House) (domain.House, error) {
