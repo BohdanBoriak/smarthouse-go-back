@@ -30,6 +30,7 @@ func (c HouseController) Save() http.HandlerFunc {
 			return
 		}
 
+		house.UserId = user.Id
 		house, err = c.houseService.Save(house)
 		if err != nil {
 			log.Printf("HouseController: %s", err)
@@ -37,6 +38,8 @@ func (c HouseController) Save() http.HandlerFunc {
 			return
 		}
 
-		Success(w, resources.UserDto{}.DomainToDto(user))
+		var response resources.HouseDto
+		response = response.DomainToDto(house)
+		Created(w, response)
 	}
 }

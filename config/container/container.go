@@ -1,6 +1,9 @@
 package container
 
 import (
+	"log"
+	"net/http"
+
 	"github.com/BohdanBoriak/boilerplate-go-back/config"
 	"github.com/BohdanBoriak/boilerplate-go-back/internal/app"
 	"github.com/BohdanBoriak/boilerplate-go-back/internal/infra/database"
@@ -9,8 +12,6 @@ import (
 	"github.com/go-chi/jwtauth/v5"
 	"github.com/upper/db/v4"
 	"github.com/upper/db/v4/adapter/postgresql"
-	"log"
-	"net/http"
 )
 
 type Container struct {
@@ -29,8 +30,9 @@ type Services struct {
 }
 
 type Controllers struct {
-	AuthController controllers.AuthController
-	UserController controllers.UserController
+	AuthController  controllers.AuthController
+	UserController  controllers.UserController
+	HouseController controllers.HouseController
 }
 
 func New(conf config.Configuration) Container {
@@ -39,12 +41,15 @@ func New(conf config.Configuration) Container {
 
 	sessionRepository := database.NewSessRepository(sess)
 	userRepository := database.NewUserRepository(sess)
+	houseRepository := database.NewHouseRepository(sess)
 
 	userService := app.NewUserService(userRepository)
 	authService := app.NewAuthService(sessionRepository, userRepository, tknAuth, conf.JwtTTL)
+	houseService := app.NewHouseService(houseRepository)
 
 	authController := controllers.NewAuthController(authService, userService)
 	userController := controllers.NewUserController(userService, authService)
+	houseController := controllers.NewHouseController(houseService)
 
 	authMiddleware := middlewares.AuthMiddleware(tknAuth, authService, userService)
 
@@ -59,6 +64,7 @@ func New(conf config.Configuration) Container {
 		Controllers: Controllers{
 			authController,
 			userController,
+			houseController,
 		},
 	}
 }

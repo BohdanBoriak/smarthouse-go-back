@@ -23,6 +23,7 @@ type house struct {
 
 type HouseRepository interface {
 	Save(h domain.House) (domain.House, error)
+	FindForUser(uId uint64) ([]domain.House, error)
 }
 
 type houseRepository struct {
@@ -39,12 +40,25 @@ func NewHouseRepository(dbSession db.Session) houseRepository {
 
 func (r houseRepository) Save(h domain.House) (domain.House, error) {
 	hs := r.mapDomainToModel(h)
+	hs.CreatedDate = time.Now()
+	hs.UpdatedDate = time.Now()
 	err := r.coll.InsertReturning(&hs)
 	if err != nil {
 		return domain.House{}, err
 	}
 	dh := r.mapModelToDomain(hs)
 	return dh, nil
+}
+
+func (r houseRepository) FindForUser(uId uint64) ([]domain.House, error) {
+	var houses []house
+	err := r.coll.Find(db.Cond{"user_id": uId, "deleted_date": nil}).All(&houses)
+	if err != nil {
+		return nil, err
+	}
+
+	hs := r.mapModelToDomainCollection(houses)
+	return hs, nil
 }
 
 func (r houseRepository) mapDomainToModel(h domain.House) house {
@@ -73,4 +87,13 @@ func (r houseRepository) mapModelToDomain(h house) domain.House {
 		UpdatedDate: h.UpdatedDate,
 		DeletedDate: h.DeletedDate,
 	}
+}
+
+func (r houseRepository) mapModelToDomainCollection(hs []house) []domain.House {
+	var houses []domain.House
+	for _, h := range hs {
+		house := r.mapModelToDomain(h)
+		houses = append(houses, house)
+	}
+	return houses
 }
