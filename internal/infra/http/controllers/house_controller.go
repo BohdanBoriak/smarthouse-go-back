@@ -43,3 +43,19 @@ func (c HouseController) Save() http.HandlerFunc {
 		Created(w, response)
 	}
 }
+
+func (c HouseController) HousesList() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		user := r.Context().Value(UserKey).(domain.User)
+		houses, err := c.houseService.FindByUserId(user.Id)
+		if err != nil {
+			log.Printf("HouseController: %s", err)
+			InternalServerError(w, err)
+			return
+		}
+
+		var hDto resources.HouseDto
+		response := hDto.DomainToDtoCollection(houses)
+		Success(w, response)
+	}
+}

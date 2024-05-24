@@ -11,6 +11,10 @@ type HouseDto struct {
 	Lon     float64 `json:"lon"`
 }
 
+type HousesDto struct {
+	Houses []HouseDto `json:"houses"`
+}
+
 func (d HouseDto) DomainToDto(house domain.House) HouseDto {
 	return HouseDto{
 		Id:      house.Id,
@@ -19,5 +23,17 @@ func (d HouseDto) DomainToDto(house domain.House) HouseDto {
 		Address: house.Address,
 		Lat:     house.Lat,
 		Lon:     house.Lon,
+	}
+}
+
+func (d HouseDto) DomainToDtoCollection(hs []domain.House) HousesDto {
+	var hsDto []HouseDto
+	for _, h := range hs {
+		hDto := d.DomainToDto(h)
+		hsDto = append(hsDto, hDto)
+	}
+
+	return HousesDto{
+		Houses: hsDto,
 	}
 }
