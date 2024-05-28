@@ -61,6 +61,11 @@ func (r houseRepository) FindForUser(uId uint64) ([]domain.House, error) {
 	return hs, nil
 }
 
+func (r houseRepository) FindById(id uint64) (domain.House, error) {
+	var hs house
+
+}
+
 func (r houseRepository) mapDomainToModel(h domain.House) house {
 	return house{
 		Id:          h.Id,
