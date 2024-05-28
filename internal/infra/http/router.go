@@ -10,7 +10,9 @@ import (
 
 	"github.com/BohdanBoriak/boilerplate-go-back/config"
 	"github.com/BohdanBoriak/boilerplate-go-back/config/container"
+	"github.com/BohdanBoriak/boilerplate-go-back/internal/app"
 	"github.com/BohdanBoriak/boilerplate-go-back/internal/infra/http/controllers"
+	"github.com/BohdanBoriak/boilerplate-go-back/internal/infra/http/middlewares"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/cors"
 
@@ -102,7 +104,8 @@ func UserRouter(r chi.Router, uc controllers.UserController) {
 	})
 }
 
-func HouseRouter(r chi.Router, hc controllers.HouseController) {
+func HouseRouter(r chi.Router, hc controllers.HouseController, hs app.HouseService) {
+	hpom := middlewares.PathObject("houseId", controllers.HouseKey, hs)
 	r.Route("/houses", func(apiRouter chi.Router) {
 		apiRouter.Post(
 			"/",
@@ -111,6 +114,10 @@ func HouseRouter(r chi.Router, hc controllers.HouseController) {
 		apiRouter.Get(
 			"/",
 			hc.HousesList(),
+		)
+		apiRouter.With(hpom).Get(
+			"/{houseId}",
+			hc.FindById(),
 		)
 	})
 }

@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"errors"
 	"log"
 	"net/http"
 
@@ -56,6 +57,22 @@ func (c HouseController) HousesList() http.HandlerFunc {
 
 		var hDto resources.HouseDto
 		response := hDto.DomainToDtoCollection(houses)
+		Success(w, response)
+	}
+}
+
+func (c HouseController) FindById() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		user := r.Context().Value(UserKey).(domain.User)
+		house := r.Context().Value(HouseKey).(domain.House)
+		if user.Id != house.UserId {
+			err := errors.New("access denied")
+			Forbidden(w, err)
+			return
+		}
+
+		var response resources.HouseDto
+		response = response.DomainToDto(house)
 		Success(w, response)
 	}
 }

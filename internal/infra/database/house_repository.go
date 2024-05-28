@@ -24,6 +24,7 @@ type house struct {
 type HouseRepository interface {
 	Save(h domain.House) (domain.House, error)
 	FindForUser(uId uint64) ([]domain.House, error)
+	FindById(id uint64) (domain.House, error)
 }
 
 type houseRepository struct {
@@ -63,7 +64,14 @@ func (r houseRepository) FindForUser(uId uint64) ([]domain.House, error) {
 
 func (r houseRepository) FindById(id uint64) (domain.House, error) {
 	var hs house
-
+	err := r.coll.
+		Find("id = ? AND deleted_date IS NULL", id).
+		One(&hs)
+	if err != nil {
+		return domain.House{}, err
+	}
+	dHouse := r.mapModelToDomain(hs)
+	return dHouse, nil
 }
 
 func (r houseRepository) mapDomainToModel(h domain.House) house {
