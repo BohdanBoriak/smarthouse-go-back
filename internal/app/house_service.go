@@ -12,6 +12,8 @@ type HouseService interface {
 	FindByUserId(uId uint64) ([]domain.House, error)
 	FindById(id uint64) (domain.House, error)
 	Find(id uint64) (interface{}, error)
+	Update(h domain.House) (domain.House, error)
+	Delete(id uint64) error
 }
 
 type houseService struct {
@@ -58,4 +60,22 @@ func (s houseService) Find(id uint64) (interface{}, error) {
 		return domain.House{}, err
 	}
 	return house, nil
+}
+
+func (s houseService) Update(h domain.House) (domain.House, error) {
+	house, err := s.houseRepository.Update(h)
+	if err != nil {
+		log.Printf("HouseService -> Update: %s", err)
+		return domain.House{}, err
+	}
+	return house, nil
+}
+
+func (s houseService) Delete(id uint64) error {
+	err := s.houseRepository.Delete(id)
+	if err != nil {
+		log.Printf("HouseService -> Delete: %s", err)
+		return err
+	}
+	return nil
 }

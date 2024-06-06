@@ -52,7 +52,7 @@ func Router(cont container.Container) http.Handler {
 				apiRouter.Use(cont.AuthMw)
 
 				UserRouter(apiRouter, cont.UserController)
-				HouseRouter(apiRouter, cont.HouseController)
+				HouseRouter(apiRouter, cont.HouseController, cont.HouseService)
 				apiRouter.Handle("/*", NotFoundJSON())
 			})
 		})
@@ -116,6 +116,14 @@ func HouseRouter(r chi.Router, hc controllers.HouseController, hs app.HouseServi
 			hc.HousesList(),
 		)
 		apiRouter.With(hpom).Get(
+			"/{houseId}",
+			hc.FindById(),
+		)
+		apiRouter.With(hpom).Put(
+			"/{houseId}",
+			hc.FindById(),
+		)
+		apiRouter.With(hpom).Delete(
 			"/{houseId}",
 			hc.FindById(),
 		)

@@ -76,3 +76,58 @@ func (c HouseController) FindById() http.HandlerFunc {
 		Success(w, response)
 	}
 }
+
+func (c HouseController) Update() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		user := r.Context().Value(UserKey).(domain.User)
+		house := r.Context().Value(HouseKey).(domain.House)
+		if user.Id != house.UserId {
+			err := errors.New("access denied")
+			Forbidden(w, err)
+			return
+		}
+
+		houseNew, err := requests.Bind(r, requests.HouseRequest{}, domain.House{})
+		if err != nil {
+			log.Printf("HouseController: %s", err)
+			BadRequest(w, err)
+			return
+		}
+
+		house.Name = houseNew.Name
+		house.Address = houseNew.Address
+		house.Lat = houseNew.Lat
+		house.Lon = houseNew.Lon
+		house, err = c.houseService.Update(house)
+		if err != nil {
+			log.Printf("HouseController: %s", err)
+			InternalServerError(w, err)
+			return
+		}
+
+		var response resources.HouseDto
+		response = response.DomainToDto(houseNew)
+		Success(w, response)
+	}
+}
+
+func (c HouseController) Delete() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		user := r.Context().Value(UserKey).(domain.User)
+		house := r.Context().Value(HouseKey).(domain.House)
+		if user.Id != house.UserId {
+			err := errors.New("access denied")
+			Forbidden(w, err)
+			return
+		}
+
+		err := c.houseService.Delete(house.Id)
+		if err != nil {
+			log.Printf("HouseController: %s", err)
+			InternalServerError(w, err)
+			return
+		}
+
+		Ok(w)
+	}
+}

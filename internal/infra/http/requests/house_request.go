@@ -3,10 +3,10 @@ package requests
 import "github.com/BohdanBoriak/boilerplate-go-back/internal/domain"
 
 type HouseRequest struct {
-	Name    string  `json:"name"`
-	Address string  `json:"address"`
-	Lat     float64 `json:"lat"`
-	Lon     float64 `json:"lon"`
+	Name    string  `json:"name" validate:"required"`
+	Address string  `json:"address" validate:"required"`
+	Lat     float64 `json:"lat" validate:"required"`
+	Lon     float64 `json:"lon" validate:"required"`
 }
 
 func (r HouseRequest) ToDomainModel() (interface{}, error) {
