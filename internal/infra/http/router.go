@@ -121,11 +121,11 @@ func HouseRouter(r chi.Router, hc controllers.HouseController, hs app.HouseServi
 		)
 		apiRouter.With(hpom).Put(
 			"/{houseId}",
-			hc.FindById(),
+			hc.Update(),
 		)
 		apiRouter.With(hpom).Delete(
 			"/{houseId}",
-			hc.FindById(),
+			hc.Delete(),
 		)
 	})
 }
