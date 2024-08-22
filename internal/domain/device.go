@@ -9,7 +9,7 @@ type Device struct {
 	Name        string
 	Model       string
 	Type        DeviceType
-	Desription  *string
+	Description *string
 	Units       string
 	UUID        string
 	CreatedDate time.Time

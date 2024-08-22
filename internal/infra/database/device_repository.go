@@ -16,7 +16,7 @@ type device struct {
 	Name        string            `db:"name"`
 	Model       string            `db:"model"`
 	Type        domain.DeviceType `db:"devicetype"`
-	Desription  *string           `db:"description"`
+	Description  *string           `db:"description"`
 	Units       string            `db:"units"`
 	UUID        string            `db:"uuid"`
 	CreatedDate time.Time         `db:"created_date"`
@@ -52,7 +52,7 @@ func (r deviceRepository) mapDomainToModel(d domain.Device) device {
 		Name:        d.Name,
 		Model:       d.Model,
 		Type:        d.Type,
-		Desription:  d.Desription,
+		Description:  d.Description,
 		Units:       d.Units,
 		UUID:        d.UUID,
 		CreatedDate: d.CreatedDate,
@@ -69,7 +69,7 @@ func (r deviceRepository) mapModelToDomain(d device) domain.Device {
 		Name:        d.Name,
 		Model:       d.Model,
 		Type:        d.Type,
-		Desription:  d.Desription,
+		Description: d.Description,
 		Units:       d.Units,
 		UUID:        d.UUID,
 		CreatedDate: d.CreatedDate,

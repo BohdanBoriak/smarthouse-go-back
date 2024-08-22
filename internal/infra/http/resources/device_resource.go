@@ -26,7 +26,7 @@ func (d DeviceDto) DomainToDto(device domain.Device) DeviceDto {
 		Name:       device.Name,
 		Model:      device.Model,
 		Type:       device.Type,
-		Desription: device.Desription,
+		Desription: device.Description,
 		Units:      device.Units,
 		UUID:       device.UUID,
 	}
