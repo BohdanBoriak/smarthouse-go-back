@@ -15,8 +15,8 @@ type device struct {
 	UserId      uint64            `db:"user_id"`
 	Name        string            `db:"name"`
 	Model       string            `db:"model"`
-	Type        domain.DeviceType `db:"devicetype"`
-	Description  *string           `db:"description"`
+	Type        domain.DeviceType `db:"type"`
+	Description *string           `db:"description"`
 	Units       string            `db:"units"`
 	UUID        string            `db:"uuid"`
 	CreatedDate time.Time         `db:"created_date"`
@@ -39,7 +39,7 @@ type deviceRepository struct {
 
 func NewDeviceRepository(dbSession db.Session) deviceRepository {
 	return deviceRepository{
-		coll: dbSession.Collection(HousesTableName),
+		coll: dbSession.Collection(DevicesTableName),
 		sess: dbSession,
 	}
 }
@@ -52,7 +52,7 @@ func (r deviceRepository) mapDomainToModel(d domain.Device) device {
 		Name:        d.Name,
 		Model:       d.Model,
 		Type:        d.Type,
-		Description:  d.Description,
+		Description: d.Description,
 		Units:       d.Units,
 		UUID:        d.UUID,
 		CreatedDate: d.CreatedDate,

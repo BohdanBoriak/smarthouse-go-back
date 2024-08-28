@@ -39,7 +39,7 @@ func (s deviceService) Save(d domain.Device) (domain.Device, error) {
 func (s deviceService) FindById(id uint64) (domain.Device, error) {
 	device, err := s.deviceRepository.FindById(id)
 	if err != nil {
-		log.Printf("HouseService -> FindById: %s", err)
+		log.Printf("DeviceService -> FindById: %s", err)
 		return domain.Device{}, err
 	}
 	return device, nil
