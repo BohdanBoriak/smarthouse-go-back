@@ -3,11 +3,11 @@ package requests
 import "github.com/BohdanBoriak/boilerplate-go-back/internal/domain"
 
 type DeviceRequest struct {
-	Name       string            `json:"name" validate:"required"`
-	Model      string            `json:"model" validate:"required"`
-	Type       domain.DeviceType `json:"type" validate:"required,oneof=TEMPERATURE_SENSOR,LOCK_SENSOR,MOVE_SENSOR,LIGHT_SENSOR"`
+	Name        string            `json:"name" validate:"required"`
+	Model       string            `json:"model" validate:"required"`
+	Type        domain.DeviceType `json:"type" validate:"required,oneof=TEMPERATURE_SENSOR LOCK_SENSOR MOVE_SENSOR LIGHT_SENSOR"`
 	Description *string           `json:"description"`
-	Units      string            `json:"units" validate:"required"`
+	Units       string            `json:"units" validate:"required"`
 }
 
 func (r DeviceRequest) ToDomainModel() (interface{}, error) {
