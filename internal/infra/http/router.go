@@ -133,13 +133,24 @@ func HouseRouter(r chi.Router, hc controllers.HouseController, hs app.HouseServi
 
 func DeviceRouter(r chi.Router, dc controllers.DeviceController, ds app.DeviceService, hs app.HouseService) {
 	hpom := middlewares.PathObject("houseId", controllers.HouseKey, hs)
-	//dpom := middlewares.PathObject("deviceId", controllers.DeviceKey, ds)
+	dpom := middlewares.PathObject("deviceId", controllers.DeviceKey, ds)
 	r.Route("/house", func(apiRouter chi.Router) {
 		apiRouter.With(hpom).Post(
 			"/{houseId}/devices",
 			dc.Save(),
 		)
-
+		apiRouter.With(dpom).Delete(
+			"/devices/{deviceId}",
+			dc.Delete(),
+		)
+		apiRouter.With(dpom).Get(
+			"/devices/{deviceId}",
+			dc.FindById(),
+		)
+		apiRouter.With(dpom).Put(
+			"/devices/{deviceId}",
+			dc.Update(),
+		)
 	})
 }
 

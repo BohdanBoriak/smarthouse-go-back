@@ -32,7 +32,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"firstName\": \"Bogdan\",\n    \"secondName\": \"BORIAK3000\",\n    \"email\": \"super@gmail.com\",\n    \"password\": \"123456\"\n}",
+							"raw": "{\n    \"firstName\": \"test\",\n    \"secondName\": \"test\",\n    \"email\": \"gigachad2@gmail.com\",\n    \"password\": \"123456\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -47,13 +47,6 @@
 							"path": [
 								"auth",
 								"register"
-							],
-							"query": [
-								{
-									"key": "",
-									"value": null,
-									"disabled": true
-								}
 							]
 						}
 					},
@@ -82,7 +75,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\": \"super@gmail.com\",\n    \"password\": \"123456\"\n}",
+							"raw": "{\n    \"email\": \"gigachad2@gmail.com\",\n    \"password\": \"123456\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -329,39 +322,6 @@
 					"response": []
 				},
 				{
-					"name": "Me",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Access-Control-Request-Method",
-								"value": "GET",
-								"type": "text"
-							},
-							{
-								"key": "Access-Control-Request-Headers",
-								"value": "Content-Type",
-								"type": "text"
-							},
-							{
-								"key": "Origin",
-								"value": "http://foo.example",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/houses",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"houses"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "Update",
 					"request": {
 						"method": "PUT",
@@ -410,6 +370,39 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Me",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Access-Control-Request-Method",
+								"value": "GET",
+								"type": "text"
+							},
+							{
+								"key": "Access-Control-Request-Headers",
+								"value": "Content-Type",
+								"type": "text"
+							},
+							{
+								"key": "Origin",
+								"value": "http://foo.example",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/houses",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"houses"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -429,7 +422,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"name\": \"Secret camera for pelmeni\",\r\n  \"model\": \"BOHDANBORIAK3000\",\r\n  \"type\": \"TEMPERATURE_SENSOR\",\r\n  \"description\": \"Кажуть, що Богдан поставив його лиш щоб охолоджувати пил гарячої роботи.\",\r\n  \"units\": \"C°\"\r\n}",
+							"raw": "{\r\n  \"name\": \"Secret camera for pelmeni\",\r\n  \"model\": \"BOHDANBORIAK3000\",\r\n  \"type\": \"TEMPERATURE_SENSOR\",\r\n  \"description\": \"Кажуть, що Богдан поставив його лиш щоб охолоджувати пил пекельної роботи.\",\r\n  \"units\": \"C°\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -456,8 +449,127 @@
 							"variable": [
 								{
 									"key": "houseId",
-									"value": "2",
+									"value": "1",
 									"description": "test"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Secret camera for politechnik\",\n  \"model\": \"BOHDANBORIAK3000\",\n  \"type\": \"LOCK_SENSOR\",\n  \"description\": \"Кажуть, що Богдан поставив його лиш щоб охолоджувати пил пекельної роботи.\",\n  \"units\": \"C°\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/house/devices/:{deviceId}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"house",
+								"devices",
+								":{deviceId}"
+							],
+							"variable": [
+								{
+									"key": "{deviceId}",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/house/devices/:{deviceId}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"house",
+								"devices",
+								":{deviceId}"
+							],
+							"query": [
+								{
+									"key": null,
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "deviceId",
+									"value": "1",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "{deviceId}",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Me",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Access-Control-Request-Method",
+								"value": "GET",
+								"type": "text"
+							},
+							{
+								"key": "Access-Control-Request-Headers",
+								"value": "Content-Type",
+								"type": "text"
+							},
+							{
+								"key": "Origin",
+								"value": "http://foo.example",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/house/devices/:{deviceId}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"house",
+								"devices",
+								":{deviceId}"
+							],
+							"variable": [
+								{
+									"key": "{deviceId}",
+									"value": "2"
 								}
 							]
 						}
