@@ -9,6 +9,7 @@ type House struct {
 	Address     string
 	Lat         float64
 	Lon         float64
+	Devices     []Device
 	CreatedDate time.Time
 	UpdatedDate time.Time
 	DeletedDate *time.Time
