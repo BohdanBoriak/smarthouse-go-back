@@ -12,12 +12,14 @@ import (
 )
 
 type HouseController struct {
-	houseService app.HouseService
+	houseService  app.HouseService
+	deviceService app.DeviceService
 }
 
-func NewHouseController(hs app.HouseService) HouseController {
+func NewHouseController(hs app.HouseService, ds app.DeviceService) HouseController {
 	return HouseController{
-		houseService: hs,
+		houseService:  hs,
+		deviceService: ds,
 	}
 }
 
@@ -68,6 +70,13 @@ func (c HouseController) FindById() http.HandlerFunc {
 		if user.Id != house.UserId {
 			err := errors.New("access denied")
 			Forbidden(w, err)
+			return
+		}
+		var err error
+		house.Devices, err = c.deviceService.FindByHouseId(house.Id)
+		if err != nil {
+			log.Printf("HouseController: %s", err)
+			BadRequest(w, err)
 			return
 		}
 

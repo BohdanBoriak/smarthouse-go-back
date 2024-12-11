@@ -54,7 +54,7 @@ func New(conf config.Configuration) Container {
 
 	authController := controllers.NewAuthController(authService, userService)
 	userController := controllers.NewUserController(userService, authService)
-	houseController := controllers.NewHouseController(houseService)
+	houseController := controllers.NewHouseController(houseService, deviceService)
 	deviceController := controllers.NewDeviceController(deviceService)
 
 	authMiddleware := middlewares.AuthMiddleware(tknAuth, authService, userService)

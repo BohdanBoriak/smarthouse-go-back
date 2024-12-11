@@ -14,6 +14,7 @@ type DeviceService interface {
 	Find(id uint64) (interface{}, error)
 	Update(h domain.Device) (domain.Device, error)
 	Delete(id uint64) error
+	FindByHouseId(hid uint64) ([]domain.Device, error)
 }
 
 type deviceService struct {
@@ -48,19 +49,28 @@ func (s deviceService) FindById(id uint64) (domain.Device, error) {
 func (s deviceService) Find(id uint64) (interface{}, error) {
 	device, err := s.deviceRepository.FindById(id)
 	if err != nil {
-		log.Printf("DeviceService -> FindById: %s", err)
+		log.Printf("DeviceService -> Find: %s", err)
 		return domain.Device{}, err
 	}
 	return device, nil
 }
 
+func (s deviceService) FindByHouseId(hid uint64) ([]domain.Device, error) {
+	device, err := s.deviceRepository.FindByHouseId(hid)
+	if err != nil {
+		log.Printf("DeviceService -> FindByHouseId: %s", err)
+		return nil, err
+	}
+	return device, nil
+}
+
 func (s deviceService) Update(h domain.Device) (domain.Device, error) {
-	device, err := s.deviceRepository.Update(h)
+	devices, err := s.deviceRepository.Update(h)
 	if err != nil {
 		log.Printf("DeviceService -> Update: %s", err)
 		return domain.Device{}, err
 	}
-	return device, nil
+	return devices, nil
 }
 
 func (s deviceService) Delete(id uint64) error {

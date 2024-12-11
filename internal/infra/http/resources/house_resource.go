@@ -3,12 +3,13 @@ package resources
 import "github.com/BohdanBoriak/boilerplate-go-back/internal/domain"
 
 type HouseDto struct {
-	Id      uint64  `json:"id"`
-	UserId  uint64  `json:"userId"`
-	Name    string  `json:"name"`
-	Address string  `json:"address"`
-	Lat     float64 `json:"lat"`
-	Lon     float64 `json:"lon"`
+	Id      uint64     `json:"id"`
+	UserId  uint64     `json:"userId"`
+	Name    string     `json:"name"`
+	Address string     `json:"address"`
+	Lat     float64    `json:"lat"`
+	Lon     float64    `json:"lon"`
+	Devices DevicesDto `json:"devices"`
 }
 
 type HousesDto struct {
@@ -16,6 +17,8 @@ type HousesDto struct {
 }
 
 func (d HouseDto) DomainToDto(house domain.House) HouseDto {
+	var devices DevicesDto
+	devices = DeviceDto{}.DomainToDtoCollection(house.Devices)
 	return HouseDto{
 		Id:      house.Id,
 		UserId:  house.UserId,
@@ -23,6 +26,7 @@ func (d HouseDto) DomainToDto(house domain.House) HouseDto {
 		Address: house.Address,
 		Lat:     house.Lat,
 		Lon:     house.Lon,
+		Devices: devices,
 	}
 }
 
