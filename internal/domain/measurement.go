@@ -8,3 +8,9 @@ type Measurement struct {
 	DeviceId    uint64
 	CreatedDate time.Time
 }
+
+type Measurements struct {
+	Items []Measurement
+	Pages uint64
+	Total uint64
+}

@@ -18,6 +18,7 @@ type measurement struct {
 
 type MeasurementRepository interface {
 	Save(m domain.Measurement) (domain.Measurement, error)
+	MeasurementsList(f MeasurementSearchParams) (domain.Measurements, error)
 }
 
 type measurementRepository struct {
@@ -82,4 +83,44 @@ func (r measurementRepository) mapModelToDomainCollection(ms []measurement) []do
 		measurements = append(measurements, measurement)
 	}
 	return measurements
+}
+
+type MeasurementSearchParams struct {
+	DeviceId   uint64
+	Date       *time.Time
+	Pagination domain.Pagination
+}
+
+func (r measurementRepository) MeasurementsList(f MeasurementSearchParams) (domain.Measurements, error) {
+	query := r.coll.Find(db.Cond{"deleted_date": nil, "device_id": f.DeviceId})
+
+	if f.Date != nil {
+		query = query.And(db.Cond{"date": db.Raw("DATE_TRUNC('day', date)")})
+	}
+
+	paginate := query.Paginate(uint(f.Pagination.CountPerPage))
+	var measurements []measurement
+
+	err := paginate.Page(uint(f.Pagination.Page)).OrderBy("-CreatedDate").All(&measurements)
+	if err != nil {
+		return domain.Measurements{}, err
+	}
+
+	count, err := query.TotalEntries()
+	if err != nil {
+		return domain.Measurements{}, err
+	}
+
+	pages, err := paginate.TotalPages()
+	if err != nil {
+		return domain.Measurements{}, err
+	}
+
+	result := domain.Measurements{
+		Items: r.mapModelToDomainCollection(measurements),
+		Pages: uint64(pages),
+		Total: count,
+	}
+
+	return result, nil
 }
