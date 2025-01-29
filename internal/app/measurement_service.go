@@ -10,6 +10,7 @@ import (
 
 type MeasurementService interface {
 	Save(m domain.Measurement) (domain.Measurement, error)
+	MeasurementsList(f database.MeasurementSearchParams) (domain.Measurements, error)
 }
 
 type measurementService struct {
