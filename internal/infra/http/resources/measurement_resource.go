@@ -10,7 +10,7 @@ type MeasurementDto struct {
 	Id          uint64    `json:"id"`
 	Value       float64   `json:"value"`
 	DeviceId    uint64    `json:"deviceId"`
-	CreatedDate time.Time `json:"time"` //???
+	CreatedDate time.Time `json:"time"`
 }
 
 type MeasurementsDto struct {
@@ -19,7 +19,7 @@ type MeasurementsDto struct {
 	Total        uint64           `json:"total"`
 }
 
-func DomainToDto(m domain.Measurement) MeasurementDto {
+func (d MeasurementDto) DomainToDto(m domain.Measurement) MeasurementDto {
 	return MeasurementDto{
 		Id:          m.Id,
 		Value:       m.Value,
@@ -28,15 +28,15 @@ func DomainToDto(m domain.Measurement) MeasurementDto {
 	}
 }
 
-func DomainToDtoCollection(ms []domain.Measurement, pages, total uint64) MeasurementsDto {
+func (d MeasurementsDto) DomainToDtoCollection(ms domain.Measurements) MeasurementsDto {
 	var msDto []MeasurementDto
-	for _, m := range ms {
-		msDto = append(msDto, DomainToDto(m))
+	for _, m := range ms.Items {
+		msDto = append(msDto, MeasurementDto{}.DomainToDto(m))
 	}
 
 	return MeasurementsDto{
 		Measurements: msDto,
-		Pages:        pages,
-		Total:        total,
+		Pages:        ms.Pages,
+		Total:        ms.Total,
 	}
 }

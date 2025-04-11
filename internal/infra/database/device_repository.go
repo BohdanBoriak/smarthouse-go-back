@@ -30,6 +30,7 @@ type DeviceRepository interface {
 	Delete(id uint64) error
 	FindById(id uint64) (domain.Device, error)
 	FindByHouseId(hId uint64) ([]domain.Device, error)
+	FindByUUId(uuid string) (domain.Device, error)
 }
 
 type deviceRepository struct {
@@ -109,6 +110,18 @@ func (r deviceRepository) FindById(id uint64) (domain.Device, error) {
 	var ds device
 	err := r.coll.
 		Find("id = ? AND deleted_date IS NULL", id).
+		One(&ds)
+	if err != nil {
+		return domain.Device{}, err
+	}
+	dDevice := r.mapModelToDomain(ds)
+	return dDevice, nil
+}
+
+func (r deviceRepository) FindByUUId(uuid string) (domain.Device, error) {
+	var ds device
+	err := r.coll.
+		Find("uuid = ? AND deleted_date IS NULL", uuid).
 		One(&ds)
 	if err != nil {
 		return domain.Device{}, err

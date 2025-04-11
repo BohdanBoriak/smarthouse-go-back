@@ -1,9 +1,9 @@
 package controllers
 
 import (
-	"fmt"
 	"github.com/BohdanBoriak/boilerplate-go-back/internal/domain"
 	"github.com/BohdanBoriak/boilerplate-go-back/internal/infra/http/requests"
+	"github.com/BohdanBoriak/boilerplate-go-back/internal/infra/http/resources"
 	"log"
 	"net/http"
 	"time"
@@ -21,6 +21,7 @@ func NewMeasurementController(ms app.MeasurementService) MeasurementController {
 		measurementService: ms,
 	}
 }
+
 func (mc MeasurementController) FindList() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		p, err := requests.DecodePaginationQuery(r)
@@ -47,17 +48,37 @@ func (mc MeasurementController) FindList() http.HandlerFunc {
 			Pagination: p,
 		}
 
-		trs, err := mc.measurementService.MeasurementsList(f)
+		measurements, err := mc.measurementService.MeasurementsList(f)
 		if err != nil {
 			log.Printf("MeasurementController: %s", err)
 			InternalServerError(w, err)
 			return
 		}
 
-		fmt.Println(trs)
+		measurementsDto := resources.MeasurementsDto{}
+		measurementsDto = measurementsDto.DomainToDtoCollection(measurements)
+		Success(w, measurementsDto)
+	}
+}
 
-		//todo: finish with resources
-		//var psDto resources.TranslationRequestsDto
-		//Success(w, psDto.DomainToDtoPagination(trs))
+func (mc MeasurementController) Save() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		measurement, err := requests.Bind(r, requests.MeasurementRequest{}, domain.Measurement{})
+		if err != nil {
+			log.Printf("MeasurementController: %s", err)
+			BadRequest(w, err)
+			return
+		}
+
+		device := r.Context().Value(DeviceKey).(domain.Device)
+		measurement.DeviceId = device.Id
+		_, err = mc.measurementService.Save(measurement)
+		if err != nil {
+			log.Printf("MeasurementController: %s", err)
+			InternalServerError(w, err)
+			return
+		}
+
+		noContent(w)
 	}
 }

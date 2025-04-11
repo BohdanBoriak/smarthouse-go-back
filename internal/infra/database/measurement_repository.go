@@ -26,6 +26,13 @@ type measurementRepository struct {
 	sess db.Session
 }
 
+func NewMeasurementRepository(dbSession db.Session) measurementRepository {
+	return measurementRepository{
+		coll: dbSession.Collection(HousesTableName),
+		sess: dbSession,
+	}
+}
+
 func (r measurementRepository) Save(m domain.Measurement) (domain.Measurement, error) {
 	ms := r.mapDomainToModel(m)
 	ms.CreatedDate = time.Now()
