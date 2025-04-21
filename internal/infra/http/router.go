@@ -154,6 +154,29 @@ func DeviceRouter(r chi.Router, dc controllers.DeviceController, ds app.DeviceSe
 	})
 }
 
+func MeasurementRouter(r chi.Router, mc controllers.MeasurementController, ms app.MeasurementService, ds app.DeviceService) {
+	mpom := middlewares.PathObject("measurementId", controllers.MeasurementKey, ms)
+	dpom := middlewares.PathObject("deviceId", controllers.DeviceKey, ds)
+	r.Route("/house", func(apiRouter chi.Router) {
+		apiRouter.With(hpom).Post(
+			"/{houseId}/devices",
+			dc.Save(),
+		)
+		apiRouter.With(dpom).Delete(
+			"/devices/{deviceId}",
+			dc.Delete(),
+		)
+		apiRouter.With(dpom).Get(
+			"/devices/{deviceId}",
+			dc.FindById(),
+		)
+		apiRouter.With(dpom).Put(
+			"/devices/{deviceId}",
+			dc.Update(),
+		)
+	})
+}
+
 func NotFoundJSON() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")

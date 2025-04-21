@@ -19,6 +19,7 @@ type measurement struct {
 type MeasurementRepository interface {
 	Save(m domain.Measurement) (domain.Measurement, error)
 	MeasurementsList(f MeasurementSearchParams) (domain.Measurements, error)
+	FindByDeviceId(dId uint64, date time.Time) ([]domain.Measurement, error)
 }
 
 type measurementRepository struct {

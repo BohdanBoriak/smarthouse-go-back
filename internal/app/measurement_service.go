@@ -3,6 +3,7 @@ package app
 //я Віталій
 import (
 	"log"
+	"time"
 
 	"github.com/BohdanBoriak/boilerplate-go-back/internal/domain"
 	"github.com/BohdanBoriak/boilerplate-go-back/internal/infra/database"
@@ -39,4 +40,13 @@ func (s measurementService) MeasurementsList(f database.MeasurementSearchParams)
 		return domain.Measurements{}, err
 	}
 	return measurements, nil
+}
+
+func (s measurementService) FindByDeviceId(dId uint64, date time.Time) (domain.Measurement, error) {
+	measurement[], err := s.measurementRepository.FindByDeviceId(dId, date)
+	if err != nil {
+		log.Printf("DeviceService -> FindByUUId: %s", err)
+		return domain.Measurement{}, err
+	}
+	return measurement[did, date], nil
 }
